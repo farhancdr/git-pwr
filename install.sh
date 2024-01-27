@@ -6,6 +6,8 @@ CLI_NAME="git-pwr"
 BIN_DIRECTORY="/usr/local/bin"
 GO_VERSION="1.21"  # Change to the required Go version
 
+cd ~
+
 # Function to display error and exit
 error_exit() {
     echo "Error: $1" >&2
@@ -34,5 +36,7 @@ go build || error_exit "Failed to build the project"
 # Move the executable to the bin directory
 echo "Moving the executable to ${BIN_DIRECTORY}..."
 sudo mv ${CLI_NAME} ${BIN_DIRECTORY} || error_exit "Failed to move the executable"
+cd ~
+rm -rf git-pwr
 
 echo "Installation completed successfully!"
