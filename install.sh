@@ -1,42 +1,55 @@
 #!/bin/bash
 
-# Replace these placeholders with your actual values
-REPO_URL="https://github.com/farhancdr/git-pwr"
-CLI_NAME="git-pwr"
-BIN_DIRECTORY="/usr/local/bin"
-GO_VERSION="1.21"  # Change to the required Go version
+# Set the root directory
+ROOT_DIR=~
+
+# Set the project name
+PROJECT_NAME="git-pwr"
 
 cd ~
-
-# Function to display error and exit
-error_exit() {
-    echo "Error: $1" >&2
-    exit 1
-}
 
 # Check if Go is installed
 if ! command -v go &> /dev/null; then
-    # Install Go if not present
-    echo "Installing Go ${GO_VERSION}..."
-    wget https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz || error_exit "Failed to download Go"
-    sudo tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz || error_exit "Failed to extract Go"
-    rm go${GO_VERSION}.linux-amd64.tar.gz
-    export PATH=$PATH:/usr/local/go/bin
+    echo "Go is not installed. Installing Go..."
+    
+    # Install Go
+    # This assumes you are on a macOS or Linux system
+    # You may need to modify this part if your users are on a different OS
+    if [[ $(uname) == "Darwin" ]]; then
+        # Check if Homebrew is installed
+        if ! command -v brew &> /dev/null; then
+            echo "Homebrew is not installed. Installing Homebrew..."
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+        # Install Go using Homebrew
+        brew install go
+    elif [[ $(uname) == "Linux" ]]; then
+        # Install Go on Linux using apt
+        sudo apt update
+        sudo apt install -y golang
+    else
+        echo "Unsupported operating system. Please install Go manually."
+        exit 1
+    fi
 fi
 
-# Clone the GitHub repository
-echo "Cloning the repository..."
-git clone ${REPO_URL} || error_exit "Failed to clone the repository"
-cd ${CLI_NAME} || error_exit "Failed to enter the project directory"
+# Clone the project
+echo "Cloning the project..."
+git clone https://github.com/farhancdr/$PROJECT_NAME.git
+
+# Go to the project directory
+cd $PROJECT_NAME
 
 # Build the project
 echo "Building the project..."
-go build || error_exit "Failed to build the project"
+go build
 
 # Move the executable to the bin directory
-echo "Moving the executable to ${BIN_DIRECTORY}..."
-sudo mv ${CLI_NAME} ${BIN_DIRECTORY} || error_exit "Failed to move the executable"
-cd ~
-rm -rf git-pwr
+echo "Moving the executable to bin directory..."
+sudo mv $PROJECT_NAME /usr/local/bin
 
-echo "Installation completed successfully!"
+cd ~
+#removing the source project
+rm -rf $PROJECT_NAME
+
+echo "Installation complete. You can now use '$PROJECT_NAME' from the command line."
