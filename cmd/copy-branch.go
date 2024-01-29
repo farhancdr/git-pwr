@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"strings"
 
@@ -10,12 +11,14 @@ import (
 )
 
 func listGitBranches(count int) ([]string, error) {
-	localBranches, err := runCommand("git for-each-ref --sort=-committerdate --format '%(refname:short)' refs/heads | head -n " + fmt.Sprintf("%d", count))
+	numberOfBranch := int(math.Ceil(float64(count) / 2))
+
+	localBranches, err := runCommand("git for-each-ref --sort=-committerdate --format '%(refname:short)' refs/heads | head -n " + fmt.Sprintf("%d", numberOfBranch))
 	if err != nil {
 		return nil, err
 	}
 
-	remoteBranches, err := runCommand("git for-each-ref --sort=-committerdate --format '%(refname:short)' refs/remotes | head -n " + fmt.Sprintf("%d", count))
+	remoteBranches, err := runCommand("git for-each-ref --sort=-committerdate --format '%(refname:short)' refs/remotes | head -n " + fmt.Sprintf("%d", numberOfBranch))
 	if err != nil {
 		return nil, err
 	}
