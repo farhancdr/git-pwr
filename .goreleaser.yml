@@ -1,0 +1,14 @@
+project_name: git-pwr
+dist: dist
+builds:
+- main: ./git-pwr
+  goos:
+  - linux
+  - darwin
+  goarch:
+  - amd64
+  - arm64
+env:
+  - CGO_ENABLED=0
+checksum:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_checksums.txt'
