@@ -21,7 +21,6 @@ var rootCmd = &cobra.Command{
 }
 
 var listBranchesCount int
-var branchName string
 var switchBack bool
 
 var copyBranchCmd = &cobra.Command{
@@ -49,6 +48,14 @@ var publishBranchCmd = &cobra.Command{
 	},
 }
 
+var deleteBranchCmd = &cobra.Command{
+	Use:   "delete-all-branch",
+	Short: "Delete all local branches except the current one",
+	Run: func(cmd *cobra.Command, args []string) {
+		execDeleteAllBranches()
+	},
+}
+
 func runCommand(command string) (string, error) {
 	cmd := exec.Command("bash", "-c", command)
 	output, err := cmd.CombinedOutput()
@@ -61,6 +68,7 @@ func runCommand(command string) (string, error) {
 func Execute() {
 	rootCmd.AddCommand(copyBranchCmd)
 	rootCmd.AddCommand(publishBranchCmd)
+	rootCmd.AddCommand(deleteBranchCmd)
 
 	err := rootCmd.Execute()
 	if err != nil {
