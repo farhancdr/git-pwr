@@ -56,6 +56,16 @@ var deleteBranchCmd = &cobra.Command{
 	},
 }
 
+var pushTagCmd = &cobra.Command{
+	Use:   "ptag [tag name]",
+	Short: "Create and push a new tag to origin",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		tagName := strings.TrimSpace(args[0])
+		execPushTag(tagName)
+	},
+}
+
 func runCommand(command string) (string, error) {
 	cmd := exec.Command("bash", "-c", command)
 	output, err := cmd.CombinedOutput()
@@ -69,6 +79,7 @@ func Execute() {
 	rootCmd.AddCommand(copyBranchCmd)
 	rootCmd.AddCommand(publishBranchCmd)
 	rootCmd.AddCommand(deleteBranchCmd)
+	rootCmd.AddCommand(pushTagCmd)
 
 	err := rootCmd.Execute()
 	if err != nil {
