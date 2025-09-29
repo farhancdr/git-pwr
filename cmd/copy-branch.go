@@ -46,7 +46,11 @@ func printBranches(branches []string, selectedIndex int) {
 }
 
 func execCopyBranch() {
-	keyboard.Open()
+	err := keyboard.Open()
+	if err != nil {
+		fmt.Println("Error opening keyboard:", err)
+		os.Exit(1)
+	}
 	defer keyboard.Close()
 
 	branches, err := listGitBranches(listBranchesCount)

@@ -1,0 +1,6 @@
+linters-settings:
+  errcheck:
+    # ignore close() functions
+    exclude-functions:
+      - (*os.File).Close
+      - (github.com/eiannone/keyboard).Close
